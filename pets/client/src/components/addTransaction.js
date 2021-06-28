@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SimpleStorageContract from "../abi/abi.json";
+import SimpleStorageContract from "../contracts/SimpleStorage.json";
 import {useSelector, useDispatch} from 'react-redux';
 import Web3 from "web3";
 
@@ -56,8 +56,10 @@ const AddTransaction = () => {
                         }
                         arr.push(obj);
                     } 
-
+                    setTransactions(arr);
                     dispatch({ type: "ADD_TRANSACTION", payload: arr });
+
+                    console.log("response ", response);
 
                     setValue(response);
                     setAccounts(accounts);
