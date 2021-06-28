@@ -5,8 +5,8 @@ import Web3 from "web3";
 
 const AddTransaction = () => {
     //Transaction Amount and Text 
-    const [amount, setAmount] = useState([]);
-    const [text, setText] = useState([]);
+    const [amount, setAmount] = useState();
+    const [text, setText] = useState();
 
     const [accounts, setAccounts] = useState([]);
     const [contract, setContract] = useState([]);
@@ -22,6 +22,7 @@ const AddTransaction = () => {
             from: accounts[0],
             gas: 3000000
         })
+        console.log(result);
     }
 
     //Dispatch function
@@ -56,6 +57,7 @@ const AddTransaction = () => {
                         }
                         arr.push(obj);
                     } 
+                    
                     setTransactions(arr);
                     dispatch({ type: "ADD_TRANSACTION", payload: arr });
 
@@ -84,6 +86,7 @@ const AddTransaction = () => {
                 <label>Amount</label>
                 <input type="text" id="amount" required onChange={(e) => setAmount(e.target.value)}
                 />
+
                  <button className="btn">Add transaction</button>
             </form>
 
