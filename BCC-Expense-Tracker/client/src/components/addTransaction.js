@@ -5,46 +5,34 @@ import Web3 from "web3";
 
 const AddTransaction = () => {
     //Transaction Amount and Text 
-    const [amount, setAmount] = useState();
-    const [text, setText] = useState();
+    const [amount, setAmount] = useState(0);
+    const [text, setText] = useState("");
 
     const [accounts, setAccounts] = useState([]);
     const [contract, setContract] = useState([]);
     const [value, setValue] = useState(null);
     const [transactions, setTransactions] = useState([]);
 
-    const doSomething = function (e) {
-        e.preventDefault();
-        saveTransaction(text, amount);
-    };
-    const saveTransaction = async (text, amount) => {
-        const result = await contract.methods.addTransaction(text, amount).send({
-            from: accounts[0],
-            gas: 3000000
-        })
-        console.log(result);
-    }
-
     //Dispatch function
     const dispatch = useDispatch();
 
     useEffect(() => {
         const runExample = async () => {
-
             try {
                 await Web3.givenProvider.enable();
                 if (Web3.givenProvider) {
+                   
                     const web3 = new Web3(Web3.givenProvider);
-                    const accounts = await web3.eth.getAccounts();
-             
+                    let accounts = await web3.eth.getAccounts();
+                   
                     const networkId = await web3.eth.net.getId();
                     const deployedNetwork = SimpleStorageContract.networks[networkId];
-             
+                   
                     const contract = new web3.eth.Contract(
                         SimpleStorageContract.abi,
                         deployedNetwork && deployedNetwork.address,
                     );
-             
+                   
                     const response = await contract.methods.transactionCount().call();
                     //empty array for storing our data    
                     let arr = [];
@@ -57,8 +45,9 @@ const AddTransaction = () => {
                         }
                         arr.push(obj);
                     } 
-                    
+
                     setTransactions(arr);
+                   
                     dispatch({ type: "ADD_TRANSACTION", payload: arr });
 
                     console.log("response ", response);
@@ -77,6 +66,20 @@ const AddTransaction = () => {
         runExample();
     }, []);
 
+    //calling function on transaction
+    const doSomething = function (e) {
+        e.preventDefault();
+        saveTransaction(text, parseInt(amount));
+    };
+    //function to save data in solidity addTransaction function
+    const saveTransaction = async (text, amount) => {
+        console.log("trans = > ", accounts);
+        const result = await contract.methods.addTransaction(text, amount).send({
+            from: accounts[0],
+            gas: 3000000
+        });
+    }
+
     return (
         <>
             <form onSubmit={doSomething}>
@@ -84,7 +87,7 @@ const AddTransaction = () => {
                 <input type="text" id="name" required onChange={(e) => setText(e.target.value)} />
           
                 <label>Amount</label>
-                <input type="text" id="amount" required onChange={(e) => setAmount(e.target.value)}
+                <input type="number" id="amount" required onChange={(e) => setAmount(e.target.value)}
                 />
 
                  <button className="btn">Add transaction</button>
