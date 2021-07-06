@@ -47,7 +47,10 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
         gasLimit: web3.utils.toHex(80000),
         gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
         to: address,
-        data: contract.methods.setName("Aizaz Ahmad khan").encodeABI()
+        data: contract.methods.setName("Aizaz Ahmad khan",).send({
+            from: accounts[0],
+            gas: 3000000
+        }).encodeABI()
 	};
 
     const tx = new Tx.Transaction(txObject, {chain: "ropsten"});
