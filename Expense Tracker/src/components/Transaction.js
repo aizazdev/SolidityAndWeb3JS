@@ -6,7 +6,6 @@ export const Transaction = ({transaction}) => {
     const { deleteTransaction } = useContext(GlobalContext);
 
     const sign = transaction.amount < 0 ? '-' : '+';
-    console.log(transaction);
     return (
         <li className={ transaction.amount < 0? 'minus' : 'plus'}>
             {transaction.name} <span> {sign}${Math.abs(transaction.amount)}  </span>

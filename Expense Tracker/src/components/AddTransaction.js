@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react'
 import { GlobalContext } from '../context/GlobalState';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
-import MenuItem from '@material-ui/core/MenuItem';
 import Web3 from 'web3';
 import { abi, address } from '../abi/abi';
 // import '../App1.css';
@@ -13,8 +12,7 @@ export const AddTransaction = () => {
     const [amount, setAmount] = useState(0);
     const [accounts, setAccounts] = useState('');
     const [contract, setContract] = useState('');
-    const [txCount, setTxCount] = useState(0);
-    const [sign, setSign] = useState('+');
+  
     const { addTransaction } = useContext(GlobalContext);
 
     useEffect(() => {
@@ -24,22 +22,20 @@ export const AddTransaction = () => {
             setAccounts(accounts[0]);
             const contract = new web3.eth.Contract(abi, address);
             setContract(contract);
-            const txCount = await contract.methods.transactionCount().call();
-            setTxCount(txCount);
+            const txCount = await contract.methods.transactionCount().call({from: accounts[0]});
             for (let i = 0; i < txCount; i++) {
-                const { owner, name, amount } = await contract.methods.transactions(i).call();
-                const transObj = {
-                    id: Math.floor((Math.random() * 10000) + 1),
-                    owner,
-                    name,
-                    amount: parseInt(amount)
-                }
-                addTransaction(transObj);
+                 const { owner, name, amount } = await contract.methods.transactions(i).call();
+                 const transObj = {
+                     id: Math.floor((Math.random() * 10000) + 1),
+                     owner,
+                     name,
+                     amount: parseInt(amount)
+                 }
+                 addTransaction(transObj);
             }
         }
         loadBlockchain();
     }, []);
-
     const addTransactionAsync = (name, amount) => {
         const receipt = contract.methods.setTransaction(name, amount).send({ from: accounts });
     }
@@ -60,7 +56,7 @@ export const AddTransaction = () => {
                 id: Math.floor((Math.random() * 10000) + 1),
                 owner: accounts,
                 name,
-                amount: ((sign === '-') ? -Math.abs(amount) : amount)
+                amount
             }
             addTransactionAsync(name, amount);
             addTransaction(newTransaction)
