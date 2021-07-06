@@ -43,20 +43,9 @@ export const AddTransaction = () => {
     const addTransactionAsync = (name, amount) => {
         const receipt = contract.methods.setTransaction(name, amount).send({ from: accounts });
     }
-    const transactionSign = [
-        {
-            value: 'Income',
-            label: '+',
-        },
-        {
-            value: 'Expense',
-            label: '-',
-        },
-    ];
-
+  
     const onSubmit = e => {
         e.preventDefault();
-        console.log(sign);
         if (amount === 0 || name === '') {
 
             if (amount === 0) {
@@ -73,57 +62,11 @@ export const AddTransaction = () => {
                 name,
                 amount: ((sign === '-') ? -Math.abs(amount) : amount)
             }
-            //            console.log(();
-            console.log("amount ", amount);
             addTransactionAsync(name, amount);
             addTransaction(newTransaction)
         }
     }
-    // const addExpenseClick = e => {
-    //     e.preventDefault();
-    //     if (amount === 0 || name === '') {
-
-    //         if (amount === 0) {
-    //             document.querySelector('.err-trans-desc').style.display = 'flex'
-    //         }
-    //         if (name === '') {
-    //             document.querySelector('.err-trans-amount').style.display = 'flex'
-    //         }
-
-    //     } else {
-    //         const newTransaction = {
-    //             id: Math.floor((Math.random() * 10000) + 1),
-    //             owner: accounts,
-    //             name,
-    //             amount: Number(amount)
-    //         }
-    //         console.log(amount);
-    //         addTransactionAsync(name, amount);
-    //         addTransaction(newTransaction)
-    //     }
-    // }
-    // const addIncomeClick = e => {
-    //     e.preventDefault();
-    //     if (amount === 0 || name === '') {
-    //         if (amount === 0) {
-    //             document.querySelector('.err-trans-desc').style.display = 'flex'
-    //         }
-    //         if (name === '') {
-    //             document.querySelector('.err-trans-amount').style.display = 'flex'
-    //         }
-    //     } else {
-    //         const newTransaction = {
-    //             id: Math.floor((Math.random() * 10000) + 1),
-    //             owner: accounts,
-    //             name,
-    //             amount: Number(amount)
-    //         }
-    //         console.log(amount);
-    //         addTransactionAsync(name, amount);
-    //         addTransaction(newTransaction)
-    //     }
-    // }
-
+ 
     return (
         <>
             <form >
